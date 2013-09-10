@@ -29,11 +29,17 @@ enum SortTypes {
 	BUBBLE,
 	SHELL,
 	MERGE,
-	QUICK
+	QUICK,
+	LIBRARY
 }
 
 public class GoodSortsTest extends MySorts {
 
+	@Test
+	public void librarySort() {
+		System.out.println("Library sort");
+		arraySortTest("library");
+	}
 	
 	@Test
 	public void bubbleSortTest() {
@@ -99,6 +105,8 @@ public class GoodSortsTest extends MySorts {
 			case SELECT: selectSort(sortme);
 				break;
 			case INSERT: insertSort(sortme);
+				break;
+			case LIBRARY: librarySort(sortme);
 				break;
 			case BUBBLE: 
 			default: bubbleSort(sortme);

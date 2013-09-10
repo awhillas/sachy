@@ -7,6 +7,24 @@ package unsw.comp9024.sorts;
  * Sort an array in various ways.
  */
 public class MySorts {
+	private static int comparisons = 0;
+	
+	public static void librarySort(int[] data) {
+		//int k = (int) Math.sqrt(data.length);
+		int k = data.length / 2;
+		
+		int[] first = new int[k];
+		int[] last = new int[data.length - k];
+		System.arraycopy(data, 0, first, 0, k);
+		System.arraycopy(data, k, last, 0, data.length - k);
+		
+		bubbleSort(first);
+		bubbleSort(last);
+		
+		merge(first, last, data);
+		
+		System.out.println("Comparisons: " + MySorts.comparisons);
+	}
 	
 	public static void bubbleSort(int[] data) {
 		for (int i = 0; i < data.length; i++) {
@@ -14,10 +32,11 @@ public class MySorts {
 			for(int j = 0; j < data.length - i - 1; j++) {
 				if (data[j] > data[j + 1]) {
 					MySorts.swap(data, j, j + 1);
-					haveSwapped = true;
+					//haveSwapped = true;
+					MySorts.comparisons++;
 				}
 			}
-			if (!haveSwapped) break;	// This makes best case linear!
+			//if (!haveSwapped) break;	// This makes best case linear!
 		}
 	}
 	
@@ -92,6 +111,10 @@ public class MySorts {
 		mergeSort(left);
 		mergeSort(right);
 		
+		merge(left, right, data);
+	}
+	
+	public static void merge(int[] left, int[] right, int data[]) {
 		// merge left and right into data.
 		int l = 0;
 		int r = 0;
@@ -99,20 +122,27 @@ public class MySorts {
 		while(l < left.length && r < right.length) {
 			if(left[l] < right[r]) {
 				data[i] = left[l++];
+				MySorts.comparisons++;
 			} else {
 				data[i] = right[r++];
+				MySorts.comparisons++;
 			}
 			i++;
 		}
 		// copy rest of left/right since we break if hit the end of right.
-		if (l < left.length)
-			for (int j = i; j < data.length; j++)
+		if (l < left.length) {
+			for (int j = i; j < data.length; j++) {
 				data[j] = left[l++];
-		else
-			for (int j = i; j < data.length; j++)
+				MySorts.comparisons++;
+			}
+		} else {
+			for (int j = i; j < data.length; j++) {
 				data[j] = right[r++];
+				MySorts.comparisons++;
+			}
+		}
 	}
-
+	
 	public static void quickSort(int[] data) {
 		quickSort(data, 0, data.length - 1);
 	}
