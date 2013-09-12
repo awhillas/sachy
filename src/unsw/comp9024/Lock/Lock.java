@@ -28,7 +28,7 @@ public class Lock {
 	 * @return
 	 */
 	public boolean isLocked() {
-		for(int i = 0; i < this.wheelCount; i++) {
+		for(int i = 0; i < Lock.wheelCount; i++) {
 			if (this.wheels[i].getNotch() != 0)
 				return false;
 		}
