@@ -1,5 +1,9 @@
 package unsw.comp9024.Tree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 import unsw.comp9024.MyOrderedTree;
 
 /**
@@ -12,46 +16,83 @@ import unsw.comp9024.MyOrderedTree;
  */
 public class Tree implements MyOrderedTree {
 
-	private String value;
+	private Node root;
 	
-	private Tree left;
+	public Tree () {
+		root = null;
+	}
 	
-	private Tree right;
-		
+	public Tree (String[] data) {
+		root = new TreeNode(data[0]);
+		for (int i = 1; i < data.length; i++) {
+			root.insert(data[i]);
+		}
+	}
+	
+	@Override
+	public void insert (String key) {
+		if (root == null) {
+			root = new TreeNode(key);
+		}
+		else {
+			root.insert(key);
+		}
+	}
+	
+	@Override
+	public boolean contains (String key) {
+		if (root != null) {
+			return root.contains(key);
+		}
+		else
+			return false;
+	}
+
+	@Override
+	public int depth() {
+		if (root != null) {
+			return root.depth() - 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// Testing...
+		String[] data = {"1", "2", "3", "4", "1a", "2a", "3a", "4a"};
+		Tree t1 = new Tree(data);
 
-	}
-	
-	public Tree (String value) {
-		this.value = value;
-	}
-	
-	public void insert (String key) {
-		Tree side;
-		if (key.compareTo(this.value) <= 0) {
-			side = this.left;
-		} else {
-			side = this.right;
+		// Test inserting and lookup works.
+		boolean hasAllData = true;
+		for (int i = 0; i < data.length; i++) {
+			if (!t1.contains(data[i])) {
+				System.out.println("Missing: "+ data[i]);
+				hasAllData = false;
+			}
 		}
-		if (side == null)
-			side = new Tree(key);
+		if(!hasAllData)
+			System.out.println("1.FAIL: Not all data found?");
 		else
-			side.insert(key);
-
-	}
-	
-	public boolean contains (String key) {
-		if(key.compareTo(this.getValue()) == 0)
-			return true;
+			System.out.println("1.PASSED: All data found!");
+		
+		// Try in reverse...
+		Collections.reverse(Arrays.asList(data));
+		hasAllData = true;
+		for (int i = 0; i < data.length; i++) {
+			if (!t1.contains(data[i])) {
+				System.out.println("Missing: "+ data[i]);
+				hasAllData = false;
+			}
+		}
+		if(!hasAllData)
+			System.out.println("1.FAIL: Not all data found?");
 		else
-			return this.left.contains(key) || this.right.contains(key);
-	}
-
-	public String getValue() {
-		return value;
+			System.out.println("1.PASSED: All data found!");
+		
+		
 	}
 }
