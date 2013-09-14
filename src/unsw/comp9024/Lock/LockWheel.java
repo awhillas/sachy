@@ -12,7 +12,7 @@ public interface LockWheel {
 	/**
 	 * The number of positions on the wheel (and Locks dial).
 	 */
-	public static final int positionCount = 20;
+	public static final int maxIndex = 19;
 	
 	/**
 	 * Rotate the wheel position by 'amount'.
