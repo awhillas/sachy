@@ -19,9 +19,12 @@ public class TreeNode implements Node {
 			return true;
 		}
 		else {
-			boolean l = (left != null)? left.contains(needle): false;
-			boolean r = (right != null)? right.contains(needle): false;
-			return l || r;
+			if (value.compareTo(needle) > 0) {
+			return (left != null)? left.contains(needle): false;
+			}
+			else {
+				return (right != null)? right.contains(needle): false;
+			}
 		}
 	}
 
