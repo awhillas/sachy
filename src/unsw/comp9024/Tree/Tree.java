@@ -89,9 +89,9 @@ public class Tree implements MyOrderedTree {
 			}
 		}
 		if(!hasAllData)
-			System.out.println("1.FAIL: Not all data found?");
+			System.out.println("2.FAIL: Not all data found?");
 		else
-			System.out.println("1.PASSED: All data found!");
+			System.out.println("2.PASSED: All data found!");
 		
 		
 	}
