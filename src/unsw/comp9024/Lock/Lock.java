@@ -11,8 +11,6 @@ public class Lock {
 
 	private static final int wheelCount = 4;
 	
-	private DriveCam cam;
-	
 	private LockWheel[] wheels;
 	
 	public static void main(String[] args) {
