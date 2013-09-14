@@ -1,6 +1,5 @@
 package unsw.comp9024.Tree;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -62,6 +61,7 @@ public class Tree implements MyOrderedTree {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println("Testing Tree");
 		// Testing...
 		String[] data = {"1", "2", "3", "4", "1a", "2a", "3a", "4a"};
 		Tree t1 = new Tree(data);
@@ -92,7 +92,5 @@ public class Tree implements MyOrderedTree {
 			System.out.println("2.FAIL: Not all data found?");
 		else
 			System.out.println("2.PASSED: All data found!");
-		
-		
 	}
 }
