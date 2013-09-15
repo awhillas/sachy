@@ -51,6 +51,7 @@ public class TreeNode implements Node {
 		return "TreeNode: "+value;
 	}
 	
+	
 	@Override
 	public int depth() {
 		int l, r;
@@ -65,5 +66,22 @@ public class TreeNode implements Node {
 			r = 0;
 		}
 		return Math.max(l, r) + 1;
+	}
+
+	public void display(int depth) {
+		String indent = String.format("%" + depth + "s", " ");
+		System.out.println(indent + "("+value+")");
+		if(left != null) {
+			left.display(depth + 1);
+		}
+		else {
+			System.out.println(indent + indent + "-");
+		}
+		if(right != null) {
+			right.display(depth + 1);
+		}
+		else {
+			System.out.println(indent + indent + "-");
+		}
 	}
 }

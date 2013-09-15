@@ -56,41 +56,51 @@ public class Tree implements MyOrderedTree {
 			return 0;
 		}
 	}
-
+	
+	public void display() {
+		if (root != null) {
+			root.display(1);
+		}
+	}
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		System.out.println("Testing Tree");
+		
 		// Testing...
-		String[] data = {"1", "2", "3", "4", "1a", "2a", "3a", "4a"};
+		
+		String[] data = {"a", "b", "c", "d", "e", "f", "g", "h"};
 		Tree t1 = new Tree(data);
-
-		// Test inserting and lookup works.
-		boolean hasAllData = true;
-		for (int i = 0; i < data.length; i++) {
-			if (!t1.contains(data[i])) {
-				System.out.println("Missing: "+ data[i]);
-				hasAllData = false;
-			}
-		}
-		if(!hasAllData)
-			System.out.println("1.FAIL: Not all data found?");
-		else
-			System.out.println("1.PASSED: All data found!");
+		t1.display();
+		test(t1, data, 1);
 		
 		// Try in reverse...
 		Collections.reverse(Arrays.asList(data));
-		hasAllData = true;
+		Tree t2 = new Tree(data);
+		t2.display();
+		test(t2, data, 2);
+		
+		// Randomise
+		Collections.shuffle(Arrays.asList(data));
+		Tree t3 = new Tree(data);
+		t3.display();
+		test(t3, data, 3);
+	}
+	
+	private static void test(Tree t, String[] data, int n) {
+		// Test inserting and lookup works.
+		boolean hasAllData = true;
 		for (int i = 0; i < data.length; i++) {
-			if (!t1.contains(data[i])) {
+			if (!t.contains(data[i])) {
 				System.out.println("Missing: "+ data[i]);
 				hasAllData = false;
 			}
 		}
 		if(!hasAllData)
-			System.out.println("2.FAIL: Not all data found?");
+			System.out.println(n+".FAIL: Not all data found?");
 		else
-			System.out.println("2.PASSED: All data found!");
+			System.out.println(n+".PASSED: All data found!");		
 	}
 }
