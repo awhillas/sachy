@@ -23,8 +23,15 @@ import unsw.comp9024.MyOrderedTree;
  */
 public class Treap implements MyOrderedTree, MyHeap {
 
-	private Node root;
+	private TreapNode root;
 
+	public Treap (String[] data) {
+		root = new TreapNode(data[0], null);
+		for (int i = 1; i < data.length; i++) {
+			root = root.insert(data[i]);
+		}
+	}
+	
 	@Override
 	public boolean contains (String s) {
 		if (root != null) {
@@ -41,49 +48,73 @@ public class Treap implements MyOrderedTree, MyHeap {
 			root = new TreapNode(s, null);
 		}
 		else {
-			root.insert(s);
+			root = root.insert(s);
 		}
 	}
 	
 	@Override
 	public void insert (String key, int heapWeight) {
-		
+		if (root == null) {
+			root = new TreapNode(key, heapWeight, null);
+		}
+		else {
+			root = root.insert(key, heapWeight);
+		}
+	}
+	
+	public void setRoot(TreapNode n) {
+		this.root = n;
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println("Testing Treap");
+		
 		// Testing...
-		String[] data = {"1", "2", "3", "4", "1a", "2a", "3a", "4a"};
-		Tree t1 = new Tree(data);
-
-		// Test inserting and lookup works.
-		boolean hasAllData = true;
-		for (int i = 0; i < data.length; i++) {
-			if (!t1.contains(data[i])) {
-				System.out.println("Missing: "+ data[i]);
-				hasAllData = false;
-			}
-		}
-		if(!hasAllData)
-			System.out.println("1.FAIL: Not all data found?");
-		else
-			System.out.println("1.PASSED: All data found!");
+		
+		String[] data = {"a", "b", "c", "d", "e", "f", "g", "h"};
+		Treap t1 = new Treap(data);
+		t1.display();
+		test(t1, data, 1);
 		
 		// Try in reverse...
 		Collections.reverse(Arrays.asList(data));
-		hasAllData = true;
+		Treap t2 = new Treap(data);
+		t2.display();
+		test(t2, data, 2);
+		
+		// Randomise
+		Collections.shuffle(Arrays.asList(data));
+		Treap t3 = new Treap(data);
+		t3.display();
+		test(t3, data, 3);
+	}
+	
+	private static void test(Treap t, String[] data, int n) {
+		// Test inserting and lookup works.
+		boolean hasAllData = true;
 		for (int i = 0; i < data.length; i++) {
-			if (!t1.contains(data[i])) {
+			if (!t.contains(data[i])) {
 				System.out.println("Missing: "+ data[i]);
 				hasAllData = false;
 			}
 		}
 		if(!hasAllData)
-			System.out.println("2.FAIL: Not all data found?");
+			System.out.println(n+".FAIL: Not all data found?");
 		else
-			System.out.println("2.PASSED: All data found!");
+			System.out.println(n+".PASSED: All data found!");		
+	}
+
+
+	/**
+	 * @param i
+	 */
+	private void display() {
+		if (root != null) {
+			root.display(1);
+		}
 	}
 
 	/* (non-Javadoc)
