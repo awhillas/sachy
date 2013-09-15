@@ -14,6 +14,7 @@ public class Lock {
 	private LockWheel[] wheels;
 	
 	public static void main(String[] args) {
+		// Tests...
 		Lock l1 = new Lock(1,1, 2,2, 3,3);
 		if(l1.isLocked()) System.out.println("FAILED: isLocked after constructor"); else System.out.println("PASSED!");
 		l1.turnClockwise(LockWheel.maxIndex);
@@ -38,7 +39,7 @@ public class Lock {
 	public boolean isLocked() {
 		for(int i = 0; i < wheelCount; i++) {
 			if (wheels[i].getNotch() != 0) {
-				System.out.println(i+" is out." + wheels[i].getNotch());
+				//System.out.println(i+" is out." + wheels[i].getNotch());
 				return true;
 			}
 		}

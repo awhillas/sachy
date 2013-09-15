@@ -39,14 +39,11 @@ public class Wheel implements LockWheel {
 		drivePin = pin;
 		flyWheel = fly;
 		above = wheelAbove;
-//		System.out.println("Pin: "+drivePin+" Fly:"+flyWheel);
-//		if(above != null)
-//			System.out.println("Dis to above CW: "+above.getDistance(drivePin, true));
 	}
 	
 	@Override
 	public void rotate(int amount) {
-		System.out.println("Rotating by: "+amount);
+		//System.out.println("Rotating by: "+amount);
 		if (amount == 0) return;
 		if(above != null) {
 			boolean clockwise = amount > 0;
@@ -60,9 +57,7 @@ public class Wheel implements LockWheel {
 				}
 			}
 		}
-		System.out.println("Old pos: "+notch+" amount: "+amount);
 		notch = (notch + amount) % LockWheel.maxIndex;
-		System.out.println("New pos: "+notch);
 	}
 	
 	/**
@@ -86,7 +81,6 @@ public class Wheel implements LockWheel {
 					return maxIndex - flyWheel + pin;
 				}
 				else {
-					//System.out.println("CCW here");
 					return pin - flyWheel - 1;
 				}
 			}
@@ -109,7 +103,7 @@ public class Wheel implements LockWheel {
 	}
 	
 	public static void main(String[] args) {
-		// Testing
+		// Testing...
 		Wheel w1 = new Wheel(0, 1, null);
 		for (int i = 0; i < maxIndex; i++) {
 			System.out.println("Dist. fly: 1 pin: "+i+" CW is:"+w1.getDistance(i, true));
@@ -120,6 +114,5 @@ public class Wheel implements LockWheel {
 			System.out.println("Dist. fly: 5 pin: "+i+" CW is:"+w2.getDistance(i, true));
 			System.out.println("Dist. fly: 5 pin: "+i+" CCW is:"+w2.getDistance(i, false));
 		}
-
 	}
 }
