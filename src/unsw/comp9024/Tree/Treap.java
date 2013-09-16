@@ -14,8 +14,6 @@ package unsw.comp9024.Tree;
 import java.util.Arrays;
 import java.util.Collections;
 
-import unsw.comp9024.MyHeap;
-import unsw.comp9024.MyOrderedTree;
 
 /**
  * @author arbw870

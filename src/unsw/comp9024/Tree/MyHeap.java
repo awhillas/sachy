@@ -1,7 +1,7 @@
 /**
  * 
  */
-package unsw.comp9024;
+package unsw.comp9024.Tree;
 
 /**
  * @author Alexander Whillas (z3446737) <whillas@gmail.com>
