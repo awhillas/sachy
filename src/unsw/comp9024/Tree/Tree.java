@@ -3,7 +3,6 @@ package unsw.comp9024.Tree;
 import java.util.Arrays;
 import java.util.Collections;
 
-import unsw.comp9024.MyOrderedTree;
 
 /**
  * Write a class Tree which stores a string which is the string in the root node, and has two child trees left and right.

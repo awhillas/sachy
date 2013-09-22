@@ -1,4 +1,4 @@
-package unsw.comp9024;
+package unsw.comp9024.Tree;
 
 public interface MyOrderedTree {
 
