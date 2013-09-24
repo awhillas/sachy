@@ -1,6 +1,3 @@
-/**
- * 
- */
 package unsw.comp9024.Lock;
 
 /**
