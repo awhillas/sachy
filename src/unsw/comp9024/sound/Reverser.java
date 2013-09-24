@@ -1,5 +1,5 @@
 /**
- * 
+ * @see http://stackoverflow.com/questions/1267488/play-wav-file-backward
  */
 package unsw.comp9024.sound;
 
