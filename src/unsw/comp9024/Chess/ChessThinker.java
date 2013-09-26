@@ -23,7 +23,7 @@ public interface ChessThinker {
       public boolean blackIsInCheckMate();
 
       /**
-       * If it were White's move now, is there a move Which can make which will immediately 
+       * If it were White's move now, is there a move White can make which will immediately 
        * place Black in checkmate?
        */
        public boolean whiteCanMateInOneMove();
