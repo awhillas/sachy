@@ -31,7 +31,6 @@ public class DeepTeal implements ChessThinker {
 			for (int j = 0; j < 8; j++) {
 				int coord = (i * 9) + j;
 				if(squares[coord].length() > 0) {
-					System.out.println(squares[coord]);
 					char c = squares[coord].charAt(0);
 					if (c != ' ') {
 						this.pieces[i][j] = makePiece(c, squares[coord].charAt(1));
