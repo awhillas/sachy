@@ -14,14 +14,17 @@ public class DeepTeal implements ChessThinker {
 	/**
 	 * @param board	String in the Design04 format describing a chess board position.
 	 */
-	public DeepTeal (String board) {
-		String[] squares = board.split("\\|");
+	public DeepTeal () {
 	}
+
+	public DeepTeal (String board) {
+		fromString(board);
+	}	
 	
 	@Override
 	public void fromString(String boardString) {
 		// TODO Auto-generated method stub
-		
+		String[] squares = board.split("\\|");
 	}
 	
 	@Override
@@ -59,7 +62,7 @@ public class DeepTeal implements ChessThinker {
 			for(int j = 0; j < 8; j++) {
 				
 			}
-		}
+			
 	}
 
 	/**
