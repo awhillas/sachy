@@ -1,15 +1,14 @@
 package unsw.comp9024.Chess;
 
-public class Knight implements Piece {
+public class Knight extends Piece {
 
-	private Side colour;
-	
-	public Knight(Side colour) {
-		this.colour = colour;
+	public Knight(Side colour, Square pos) {
+		super(colour, 'n', pos);
 	}
 	
-	public String toString() {
-		return "N";
-	}	
+	@Override
+	public boolean canMoveTo(Square p, Piece[][] board) {
+		return true;
+	}
 }
 

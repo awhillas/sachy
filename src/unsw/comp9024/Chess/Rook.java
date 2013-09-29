@@ -1,15 +1,21 @@
 package unsw.comp9024.Chess;
 
-public class Rook implements Piece {
+public class Rook extends Piece {
 
-	private Side colour;
-	
-	public Rook(Side colour) {
-		this.colour = colour;
+	public Rook(Side colour, Square pos) {
+		super(colour, 'r', pos);
 	}
 	
-	public String toString() {
-		return "R";
+	@Override
+	public boolean canMoveTo(Square p, Piece[][] board) {
+		if(!super.canMoveTo(p, board)) return false;
+		if(pos.onColumn(p) && this.columnIsClear(p, board)) {
+			return true;
+		}
+		if (pos.onRow(p) && this.rowIsClear(p, board)) {
+			return true;
+		}		
+		return false;
 	}	
 }
 
