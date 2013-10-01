@@ -10,7 +10,6 @@ public class King extends Piece {
 	public boolean canMoveTo(Square s, Position position) {
 		if(!super.canMoveTo(s, position)) return false;
 		
-		// Can not move to the same square we are on.
 		if(this.pos.distance(s) == 1) {
 			// if the square is not occupied same colour
 			Piece p = position.getPieceAt(s);

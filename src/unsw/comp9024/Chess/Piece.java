@@ -93,6 +93,7 @@ public class Piece implements Cloneable {
 	}
 	
 	public boolean canMoveTo(Square p, Position position) {
+		// Can not move to the same square we are on.
 		if(this.pos.equalTo(p)) {
 			return false;
 		}		

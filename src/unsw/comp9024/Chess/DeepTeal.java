@@ -90,24 +90,25 @@ public class DeepTeal implements ChessThinker {
 	}
 	
 	/**
-	 * Checks if the Side has no legal moves. 
-	 * Not a real test of checkmate as the king doesn't have to be in check :-/
+	 * "If it were Black's move now, is there no move Black can make which will prevent White 
+	 * from taking the Black king next move?"
+	 * Checks if the Side has no legal moves. But not that King is in check.
+	 * This is a test for checkmate and stalemate.
 	 * @param colour	Side to check
 	 * @param position	Position to check in.
 	 * @return
 	 */
 	private boolean isInCheckMateAt(Side colour, Position position) {
-		if (position.isInCheck(colour)) {
-			Piece king = position.findKing(colour);
-			Square[] moves = king.getAllMoves(position);
+		Piece[] pieces = position.getAllPiecesOf(colour);
+		for (Piece p : pieces) {
+			Square[] moves = p.getAllMoves(position);
 			for (Square m : moves) {
-				if(!position.movePieceTo(king, m).isInCheck(colour)) {
+				if(!position.movePieceTo(p, m).isInCheck(colour)) {
 					return false;
 				}
 			}
-			return true;
 		}
-		return false;		
+		return true;
 	}
 	
 	@Override

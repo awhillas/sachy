@@ -14,15 +14,18 @@ public class Pawn extends Piece {
 			if(s.equalTo(infront) && position.getPieceAt(s) == null) {
 				return true;
 			}
-			// Check if it can take right
-			if(infront.getColumn() + 1 < DeepTeal.BOARD_SIZE
-					&& s.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
-				return true;
-			}
-			// ... and left.
-			if(infront.getColumn() - 1 >= 0
-					&& s.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
-				return true;
+			// If there is a piece there to take...
+			if(position.getPieceAt(s) != null) {
+				// Check if it can take right
+				if(infront.getColumn() + 1 < DeepTeal.BOARD_SIZE
+						&& s.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
+					return true;
+				}
+				// ... and left.
+				if(infront.getColumn() - 1 >= 0
+						&& s.equalTo(new Square(infront.getRow(), infront.getColumn() - 1))) {
+					return true;
+				}
 			}
 		}
 		return false;
