@@ -7,15 +7,15 @@ public class Queen extends Piece{
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Piece[][] board) {
-		if(!super.canMoveTo(p, board)) return false;
-		if(pos.onColumn(p) && this.columnIsClear(p, board)) {
+	public boolean canMoveTo(Square s, Position position) {
+		if(!super.canMoveTo(s, position)) return false;
+		if(pos.onColumn(s) && position.columnIsClear(this.getSquare(), s)) {
 			return true;
 		}
-		if (pos.onRow(p) && this.rowIsClear(p, board)) {
+		if (pos.onRow(s) && position.rowIsClear(this.getSquare(), s)) {
 			return true;
 		}
-		if (pos.onDiagonal(p) && this.diagonalIsClear(p, board)) {
+		if (pos.onDiagonal(s) && position.diagonalIsClear(this.getSquare(), s)) {
 			return true;
 		}
 		return false;

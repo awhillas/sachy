@@ -7,9 +7,9 @@ public class Bishop extends Piece {
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Piece[][] board) {
-		if(!super.canMoveTo(p, board)) return false;
-		if (pos.onDiagonal(p) && this.diagonalIsClear(p, board)) {
+	public boolean canMoveTo(Square s, Position position) {
+		if(!super.canMoveTo(s, position)) return false;
+		if (pos.onDiagonal(s) && position.diagonalIsClear(this.getSquare(), s)) {
 			return true;
 		}
 		return false;

@@ -7,15 +7,15 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Piece[][] board) {
-		if(!super.canMoveTo(p, board)) return false;
+	public boolean canMoveTo(Square s, Position position) {
+		if(!super.canMoveTo(s, position)) return false;
 		
 		// Can not move to the same square we are on.
-		if(this.pos.distance(p) == 1) {
+		if(this.pos.distance(s) == 1) {
 			// if the square is not occupied same colour
-			if(board[p.getRow()][p.getColumn()] == null 
-					|| board[p.getRow()][p.getColumn()].getColour() != this.colour) {
-				// Does not consider if the square puts the King in check
+			Piece p = position.getPieceAt(s);
+			if(p == null || p.getColour() != this.colour) {
+				// Does not consider if the square puts the King in check...
 				return true;
 			}
 		}

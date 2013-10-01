@@ -1,5 +1,7 @@
 package unsw.comp9024.Chess;
 
+import java.util.List;
+
 public class Pawn extends Piece {
 
 	public Pawn(Side colour, Square pos) {
@@ -7,7 +9,8 @@ public class Pawn extends Piece {
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Piece[][] board) {
+	public boolean canMoveTo(Square p, Position position) {
+/*		
 		Square infront = this.getForwardSquare();
 		// Check if something is in front of it
 		if(p.equalTo(infront) && board[p.getRow()][p.getColumn()] == null) {
@@ -23,7 +26,7 @@ public class Pawn extends Piece {
 				&& p.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
 			return true;
 		}
-		
+*/		
 		return false;
 	}
 	

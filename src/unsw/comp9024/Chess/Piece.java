@@ -24,10 +24,61 @@ public class Piece implements Cloneable {
 		this.letter = letter;
 		this.pos = p;
 	}
+	
+	/**
+	 * Copy constructor. 
+	 * Nicer than implementing Cloneable.
+	 * @see http://www.artima.com/intv/bloch13.html
+	 * @see http://www.javapractices.com/topic/TopicAction.do?Id=12
+	 * @param p
+	 */
+	public Piece(Piece p) {
+		this(p.getColour(), p.getLetter(), p.getSquare());
+	}
 
+	/**
+	 * Piece Factory function.
+	 * @see http://en.wikipedia.org/wiki/Factory_method_pattern
+	 * @param type
+	 * @param side
+	 * @param pos
+	 * @return new Piece
+	 */
+	public static Piece makePiece(char type, Side colour, Square pos) {
+		//Side colour = (side == 'l') ? Side.WHITE : Side.BLACK ;
+		Piece p = null;
+		switch (type) {
+			case 'r':
+				p = new Rook(colour, pos);
+				break;
+			case 'b':
+				p = new Bishop(colour, pos);
+				break;
+			case 'n':
+				p = new Knight(colour, pos);
+				break;
+			case 'k':
+				p = new King(colour, pos);
+				break;
+			case 'q':
+				p = new Queen(colour, pos);
+				break;
+			case 'p':
+				p = new Pawn(colour, pos);
+				break;
+			default:
+				throw new IllegalArgumentException( "Unknown Piece type: " + type);
+		}
+		return p;
+	}	
+	
 	public Side getColour() {
 		return colour;
-	}	
+	}
+	
+	public char getLetter() {
+		return this.letter;
+	}
 	
 	public Square getSquare() {
 		return this.pos;
@@ -41,7 +92,7 @@ public class Piece implements Cloneable {
 		return this.letter + ((this.colour == Side.WHITE) ? "l" : "d");
 	}
 	
-	public boolean canMoveTo(Square p, Piece[][] board) {
+	public boolean canMoveTo(Square p, Position position) {
 		if(this.pos.equalTo(p)) {
 			return false;
 		}		
@@ -53,54 +104,19 @@ public class Piece implements Cloneable {
 	 * @param board
 	 * @return	An array of Squares.
 	 */
-	public Square[] getAllMoves(Piece[][] board) {
+	public Square[] getAllMoves(Position position) {
 		List<Square> out = new ArrayList<Square>();
 		for (int r = 0; r < DeepTeal.BOARD_SIZE; r++) {
 			for (int c = 0; c < DeepTeal.BOARD_SIZE; c++) {
 				Square s = new Square(r, c);
-				if (this.canMoveTo(s, board)) {
+				if (this.canMoveTo(s, position)) {
 					out.add(s);
 				}
 			}
 		}
 		return out.toArray(new Square[0]);
 	}
-	
-	public boolean rowIsClear(Square p, Piece[][] board) {
-		int step = (pos.getColumn() - p.getColumn() > 0) ? -1: 1;
-		for(int col = pos.getColumn(); col < p.getColumn(); col += step) {
-			if (board[pos.getRow()][col] != null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public boolean columnIsClear(Square p, Piece[][] board) {
-		int step = (pos.getRow() - p.getRow() > 0) ? -1: 1;
-		for(int row = pos.getRow(); row < p.getRow(); row += step) {
-			if (board[row][pos.getColumn()] != null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public boolean diagonalIsClear(Square p, Piece[][] board) {
-		assert pos.onDiagonal(p) : p +" is not on a diagonal with " + pos;
 		
-		int row_step = (pos.getRow() - p.getRow() > 0) ? -1: 1;
-		int col_step = (pos.getColumn() - p.getColumn() > 0) ? -1: 1;
-		for (int i = 1; i < pos.distance(p); i++) {
-			int row = pos.getRow() + i * row_step;
-			int col = pos.getColumn() + i * col_step;
-			if (board[row][col] != null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
 	public boolean isKing() {
 		return false;
 	}

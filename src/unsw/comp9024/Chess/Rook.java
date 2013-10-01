@@ -7,12 +7,12 @@ public class Rook extends Piece {
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Piece[][] board) {
-		if(!super.canMoveTo(p, board)) return false;
-		if(pos.onColumn(p) && this.columnIsClear(p, board)) {
+	public boolean canMoveTo(Square p, Position position) {
+		if(!super.canMoveTo(p, position)) return false;
+		if(pos.onColumn(p) && position.columnIsClear(this.getSquare(), p)) {
 			return true;
 		}
-		if (pos.onRow(p) && this.rowIsClear(p, board)) {
+		if (pos.onRow(p) && position.rowIsClear(this.getSquare(), p)) {
 			return true;
 		}		
 		return false;
