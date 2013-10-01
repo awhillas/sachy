@@ -45,8 +45,8 @@ public class TestRook implements Test {
          
          ChessThinker ct = new DeepTeal (game);
          assert (!ct.blackIsInCheck ());
-         // Actually, thats a stale mate :-/
-         //assert (ct.blackIsInCheckMate ());
+         // Actually, thats a stale mate since the King is not in check :-/
+         assert (ct.blackIsInCheckMate ());
       }
    }     
 }

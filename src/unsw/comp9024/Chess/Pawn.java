@@ -1,7 +1,5 @@
 package unsw.comp9024.Chess;
 
-import java.util.List;
-
 public class Pawn extends Piece {
 
 	public Pawn(Side colour, Square pos) {
@@ -9,33 +7,38 @@ public class Pawn extends Piece {
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Position position) {
-/*		
+	public boolean canMoveTo(Square s, Position position) {
 		Square infront = this.getForwardSquare();
-		// Check if something is in front of it
-		if(p.equalTo(infront) && board[p.getRow()][p.getColumn()] == null) {
-			return true;
+		if(infront != null) {
+			// Check if something is in front of it
+			if(s.equalTo(infront) && position.getPieceAt(s) == null) {
+				return true;
+			}
+			// Check if it can take right
+			if(infront.getColumn() + 1 < DeepTeal.BOARD_SIZE
+					&& s.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
+				return true;
+			}
+			// ... and left.
+			if(infront.getColumn() - 1 >= 0
+					&& s.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
+				return true;
+			}
 		}
-		// Check if it can take right
-		if(infront.getColumn() + 1 < DeepTeal.BOARD_SIZE
-				&& p.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
-			return true;
-		}
-		// ... and left.
-		if(infront.getColumn() - 1 >= 0
-				&& p.equalTo(new Square(infront.getRow(), infront.getColumn() + 1))) {
-			return true;
-		}
-*/		
 		return false;
 	}
 	
 	private Square getForwardSquare() {
 		if (this.colour == Side.WHITE) {
-			return new Square(pos.getRow() - 1, pos.getColumn());
+			if(pos.getRow() > 0) {
+				return new Square(pos.getRow() - 1, pos.getColumn());
+			}
 		} else {
-			return new Square(pos.getRow() + 1, pos.getColumn());
+			if(pos.getRow() < DeepTeal.BOARD_SIZE) {
+				return new Square(pos.getRow() + 1, pos.getColumn());
+			}
 		}
+		return null;
 	}
 	
 }

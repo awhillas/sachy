@@ -3,9 +3,6 @@
  */
 package unsw.comp9024.Chess;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import unsw.comp9024.Chess.d4AcceptanceTests.*;
 
 
@@ -89,32 +86,62 @@ public class DeepTeal implements ChessThinker {
 
 	@Override
 	public boolean blackIsInCheckMate() {
-		if (blackIsInCheck()) {
-			Piece king = position.findKing(Side.BLACK);
+		return isInCheckMateAt(Side.BLACK, position);
+	}
+	
+	/**
+	 * Checks if the Side has no legal moves. 
+	 * Not a real test of checkmate as the king doesn't have to be in check :-/
+	 * @param colour	Side to check
+	 * @param position	Position to check in.
+	 * @return
+	 */
+	private boolean isInCheckMateAt(Side colour, Position position) {
+		if (position.isInCheck(colour)) {
+			Piece king = position.findKing(colour);
 			Square[] moves = king.getAllMoves(position);
 			for (Square m : moves) {
-				if(!position.movePieceTo(king, m).isInCheck(Side.BLACK)) {
+				if(!position.movePieceTo(king, m).isInCheck(colour)) {
 					return false;
 				}
 			}
 			return true;
 		}
-		return false;
+		return false;		
 	}
 	
 	@Override
 	public boolean whiteCanMateInOneMove() {
-		// TODO Auto-generated method stub
+		// Get all the WHITE Pieces
+		Piece[] whites = position.getAllPiecesOf(Side.WHITE);
+		for(Piece p : whites) {
+			Square[] moves = p.getAllMoves(position);
+			for(Square m : moves) {
+				if(isInCheckMateAt(Side.BLACK, position.movePieceTo(p, m))) {
+					return true;
+				}
+			}
+		}
+		// Check if King is in Checkmate after each one.
 		return false;
 	}
-
+	
 	@Override
 	public void makeWhiteMateMove() {
-		// TODO Auto-generated method stub
-		
+		Piece[] whites = position.getAllPiecesOf(Side.WHITE);
+		for(Piece p : whites) {
+			Square[] moves = p.getAllMoves(position);
+			for(Square m : moves) {
+				Position newPosition = position.movePieceTo(p, m);
+				if(isInCheckMateAt(Side.BLACK, newPosition)) {
+					this.position = newPosition;
+					return;
+				}
+			}
+		}
 	}
 	
-	// output ASCII rep. of the board.
+	// output ASCII representation of the board.
 	public void display() {
 		System.out.print(this.toString());
 	}

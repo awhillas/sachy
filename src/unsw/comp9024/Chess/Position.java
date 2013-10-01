@@ -38,7 +38,11 @@ public class Position {
 	 */
 	public Position movePieceTo(Piece p, Square to) {
 		List<Piece> newPosition = new ArrayList<Piece>(this.pieces);	// shallow copy
-		newPosition.remove(p);
+		newPosition.remove(p);			// remove the old version of itself
+		Piece taken = getPieceAt(to);	// Check if it has taken anything...
+		if(taken != null && !taken.isKing()) {
+			newPosition.remove(taken);	// ...and remove it.
+		}
 		newPosition.add(Piece.makePiece(p.getLetter(), p.getColour(), to));
 		return new Position(newPosition);
 	}
@@ -73,7 +77,17 @@ public class Position {
 			}
 		}
 		return null;
-	}	
+	}
+	
+	public Piece[] getAllPiecesOf(Side colour) {
+		List<Piece> out = new ArrayList<Piece>();
+		for (Piece p : this.pieces) {
+			if (p.getColour() == colour) {
+				out.add(p);
+			}
+		}
+		return out.toArray(new Piece[0]);
+	}
 
 	/**
 	 * Go thought all the piece on the board and see if the other side can move to the given Square
@@ -84,7 +98,7 @@ public class Position {
 	private boolean isInCheckAt(Piece king, Square square) {
 		Side opposite = (king.getColour() == Side.WHITE)? Side.BLACK: Side.WHITE;
 		for (Piece p : this.pieces) {
-			if(p != null && p != king
+			if(p != king
 					&& p.getColour() == opposite 
 					&& p.canMoveTo(square, this)) {
 				return true;

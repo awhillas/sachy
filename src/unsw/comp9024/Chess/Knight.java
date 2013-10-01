@@ -1,7 +1,5 @@
 package unsw.comp9024.Chess;
 
-import java.util.List;
-
 public class Knight extends Piece {
 
 	public Knight(Side colour, Square pos) {
@@ -9,8 +7,13 @@ public class Knight extends Piece {
 	}
 	
 	@Override
-	public boolean canMoveTo(Square p, Position position) {
-		return true;
+	public boolean canMoveTo(Square s, Position position) {
+		int abs_row = Math.abs(this.pos.getRow() - s.getRow());
+		int abs_col = Math.abs(this.pos.getColumn() - s.getColumn());
+		if((abs_row == 2 && abs_col == 1) || (abs_row == 1 && abs_col == 2)) {
+			return true;
+		}
+		return false;
 	}
 }
 
