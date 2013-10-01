@@ -11,7 +11,7 @@ import java.util.List;
  * @author alex
  *
  */
-public class Piece {
+public class Piece implements Cloneable {
 	
 	protected Side colour;
 	
@@ -32,7 +32,11 @@ public class Piece {
 	public Square getSquare() {
 		return this.pos;
 	}
-	
+
+	public void setSquare(Square s) {
+		this.pos = s;
+	}
+
 	public String toString() {
 		return this.letter + ((this.colour == Side.WHITE) ? "l" : "d");
 	}
@@ -47,7 +51,7 @@ public class Piece {
 	/**
 	 * Get all the moves possible for this piece.
 	 * @param board
-	 * @return
+	 * @return	An array of Squares.
 	 */
 	public Square[] getAllMoves(Piece[][] board) {
 		List<Square> out = new ArrayList<Square>();
@@ -59,11 +63,11 @@ public class Piece {
 				}
 			}
 		}
-		return (Square[]) out.toArray();
+		return out.toArray(new Square[0]);
 	}
 	
 	public boolean rowIsClear(Square p, Piece[][] board) {
-		int step = (pos.getColumn() - p.getColumn() > 0) ? 1: -1;
+		int step = (pos.getColumn() - p.getColumn() > 0) ? -1: 1;
 		for(int col = pos.getColumn(); col < p.getColumn(); col += step) {
 			if (board[pos.getRow()][col] != null) {
 				return false;
@@ -73,7 +77,7 @@ public class Piece {
 	}
 	
 	public boolean columnIsClear(Square p, Piece[][] board) {
-		int step = (pos.getRow() - p.getRow() > 0) ? 1: -1;
+		int step = (pos.getRow() - p.getRow() > 0) ? -1: 1;
 		for(int row = pos.getRow(); row < p.getRow(); row += step) {
 			if (board[row][pos.getColumn()] != null) {
 				return false;
@@ -85,10 +89,12 @@ public class Piece {
 	public boolean diagonalIsClear(Square p, Piece[][] board) {
 		assert pos.onDiagonal(p) : p +" is not on a diagonal with " + pos;
 		
-		int row_step = (pos.getRow() - p.getRow() > 0) ? 1: -1;
-		int col_step = (pos.getColumn() - p.getColumn() > 0) ? 1: -1;
+		int row_step = (pos.getRow() - p.getRow() > 0) ? -1: 1;
+		int col_step = (pos.getColumn() - p.getColumn() > 0) ? -1: 1;
 		for (int i = 1; i < pos.distance(p); i++) {
-			if (board[i * row_step][i * col_step] != null) {
+			int row = pos.getRow() + i * row_step;
+			int col = pos.getColumn() + i * col_step;
+			if (board[row][col] != null) {
 				return false;
 			}
 		}
@@ -98,4 +104,8 @@ public class Piece {
 	public boolean isKing() {
 		return false;
 	}
+	
+	protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }	
 }

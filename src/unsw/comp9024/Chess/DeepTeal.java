@@ -115,16 +115,16 @@ public class DeepTeal implements ChessThinker {
 	@Override
 	public boolean blackIsInCheck() {
 		Piece king = this.findKing(Side.BLACK);
-		return isInCheckAt(king.getColour(), king.getSquare());
+		return isInCheckAt(king.getColour(), king.getSquare(), this.board);
 	}
 	
 	/**
-	 * Go thoght all the piece on the board and see if the other side can move to the given Square
+	 * Go thought all the piece on the board and see if the other side can move to the given Square
 	 * @param king
 	 * @param p
 	 * @return
 	 */
-	private boolean isInCheckAt(Side colour, Square square) {
+	private boolean isInCheckAt(Side colour, Square square, Piece[][] board) {
 		Side opposite = (colour == Side.WHITE)? Side.BLACK: Side.WHITE;
 		for (int r = 0; r < BOARD_SIZE; r++) {
 			for (int c = 0; c < BOARD_SIZE; c++) {
@@ -143,16 +143,36 @@ public class DeepTeal implements ChessThinker {
 	public boolean blackIsInCheckMate() {
 		if (blackIsInCheck()) {
 			Piece king = this.findKing(Side.BLACK);
-			for (int r = 0; r < BOARD_SIZE; r++) {
-				for (int c = 0; c < BOARD_SIZE; c++) {
-					if(king.canMoveTo(new Square(r, c), board) 
-							&& isInCheckAt(king.getColour(), new Square(r, c))) {
-						return true;
-					}
-				}
+			Square[] moves = king.getAllMoves(board);
+			for (Square m : moves) {
+				if(!isInCheckAt(king.getColour(), m, movePieceTo(king, m, board))) {
+					return false;
+				}	
 			}
+			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Moves a piece and returns the new board setup
+	 * Assumes you have checked to see if the piece can move to that square.
+	 * @param p		Piece to move
+	 * @param s		New location of the piece
+	 * @param board	Board in current state.
+	 * @return Board in new state after the piece has been moved.
+	 */
+	private Piece[][] movePieceTo(Piece p, Square s, Piece[][] board) {
+		Piece[][] newBoard = board.clone();	// shallow copy
+		try {
+			Piece newPiece = (Piece) p.clone();
+			newPiece.setSquare(s);
+			newBoard[p.getSquare().getRow()][p.getSquare().getColumn()] = null;
+			newBoard[s.getRow()][s.getColumn()] = newPiece;
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return newBoard;
 	}
 
 	@Override

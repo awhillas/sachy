@@ -31,10 +31,10 @@ public class Square {
 	public int distance(Square p) {
 		int abs_col = Math.abs(this.column - p.getColumn());
 		if(onRow(p)) {
-			return Math.abs(this.row - p.getRow());
+			return abs_col;
 		}
 		if(onColumn(p)) {
-			return abs_col;
+			return Math.abs(this.row - p.getRow());
 		}
 		if(onDiagonal(p)) {
 			return abs_col;	// return one of them.

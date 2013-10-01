@@ -15,7 +15,7 @@ public class King extends Piece {
 			// if the square is not occupied same colour
 			if(board[p.getRow()][p.getColumn()] == null 
 					|| board[p.getRow()][p.getColumn()].getColour() != this.colour) {
-				//... and not put king in check i.e. no Piece of opposite Side can move to that square.
+				// Does not consider if the square puts the King in check
 				return true;
 			}
 		}
