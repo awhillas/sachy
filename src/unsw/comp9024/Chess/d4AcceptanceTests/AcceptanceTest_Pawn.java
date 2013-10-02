@@ -97,7 +97,7 @@ public class AcceptanceTest_Pawn implements Test {
 
          assert (!deepTeal.blackIsInCheck());
 
-         // assert (!deepTeal.blackIsInCheckMate());
+         assert (!deepTeal.blackIsInCheckMate());
 
          assert (deepTeal.whiteCanMateInOneMove());
 

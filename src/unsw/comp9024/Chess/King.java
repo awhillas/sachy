@@ -13,8 +13,9 @@ public class King extends Piece {
 		if(this.pos.distance(s) == 1) {
 			// if the square is not occupied same colour
 			Piece p = position.getPieceAt(s);
-			if(p == null || p.getColour() != this.colour) {
-				// Does not consider if the square puts the King in check...
+			if( (p == null || p.getColour() != this.colour) 
+					&& (!position.movePieceTo(this, s).isInCheck(this.getColour())) // can't move into check
+			) {
 				return true;
 			}
 		}

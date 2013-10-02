@@ -40,7 +40,7 @@ public class Position {
 		List<Piece> newPosition = new ArrayList<Piece>(this.pieces);	// shallow copy
 		newPosition.remove(p);			// remove the old version of itself
 		Piece taken = getPieceAt(to);	// Check if it has taken anything...
-		if(taken != null && !taken.isKing()) {
+		if(taken != null) {
 			newPosition.remove(taken);	// ...and remove it.
 		}
 		newPosition.add(Piece.makePiece(p.getLetter(), p.getColour(), to));
@@ -90,21 +90,25 @@ public class Position {
 	}
 
 	/**
-	 * Go thought all the piece on the board and see if the other side can move to the given Square
+	 * Go thought all the piece on the board and see if the other side can  
+	 * take the given King at the given Square.
 	 * @param king
-	 * @param p
+	 * @param square
 	 * @return
 	 */
 	private boolean isInCheckAt(Piece king, Square square) {
-		Side opposite = (king.getColour() == Side.WHITE)? Side.BLACK: Side.WHITE;
 		for (Piece p : this.pieces) {
 			if(p != king
-					&& p.getColour() == opposite 
+					&& p.getColour() == getOppositeSide(king.getColour()) 
 					&& p.canMoveTo(square, this)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private Side getOppositeSide(Side colour) {
+		return (colour == Side.WHITE)? Side.BLACK: Side.WHITE;
 	}
 
 	/**
@@ -114,7 +118,14 @@ public class Position {
 	 */
 	public boolean isInCheck(Side colour) {
 		Piece king = this.findKing(colour);
-		return isInCheckAt(king, king.getSquare());
+		// Again we have to check that there is still an opposing King
+		// i.e. that the game is not over since we are allowed to take the King.
+		Piece opposingKing = this.findKing(getOppositeSide(colour));
+		if(king != null && opposingKing != null) {
+			return isInCheckAt(king, king.getSquare());
+		} else {
+			return false;
+		}
 	}
 	
 	/**

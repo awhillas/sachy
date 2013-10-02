@@ -84,14 +84,16 @@ public class DeepTeal implements ChessThinker {
 		return position.isInCheck(Side.BLACK);
 	}
 
+	/**
+	 * "If it were Black's move now, is there no move Black can make which will prevent White 
+	 * from taking the Black king next move?"
+	 */
 	@Override
 	public boolean blackIsInCheckMate() {
 		return isInCheckMateAt(Side.BLACK, position);
 	}
 	
 	/**
-	 * "If it were Black's move now, is there no move Black can make which will prevent White 
-	 * from taking the Black king next move?"
 	 * Checks if the Side has no legal moves. But not that King is in check.
 	 * This is a test for checkmate and stalemate.
 	 * @param colour	Side to check
@@ -100,6 +102,16 @@ public class DeepTeal implements ChessThinker {
 	 */
 	private boolean isInCheckMateAt(Side colour, Position position) {
 		Piece[] pieces = position.getAllPiecesOf(colour);
+		if(pieces.length == 0) {
+			// This is born from the corruption of the Chess rules in which the King can be taken
+			// possibly leaving no pieces left on the board (which happens in one of the acceptance
+			// tests). Thus if there are no piece to check there can't be a checkmate. Of course this
+			// should really be a undefined as the game is over if there are no pieces left and there
+			// can also be no checkmate, which means the king can't move out of check but if you play
+			// until the king is taken then 'checkmate' doesn't have any meaning anymore.
+			// Me no like :-<
+			return false;
+		}
 		for (Piece p : pieces) {
 			Square[] moves = p.getAllMoves(position);
 			for (Square m : moves) {
