@@ -1,3 +1,5 @@
+package unsw.comp9024.Tree.PracExam;
+
 /*
  * TestSolution.java
  *  DO NOT ALTER THIS FILE

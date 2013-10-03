@@ -3,16 +3,12 @@
  */
 package unsw.comp9024.Tree.PracExam;
 
-/**
- * @author alex
- *
- */
+
 public class MyTree implements FancyTree {
 
-	public static int rootValue;
 	public static MyTree mostRecent;
 	
-	private int value;
+	private int rootValue;
 	private MyTree parent;
 	private MyTree left;
 	private MyTree right;
@@ -21,12 +17,15 @@ public class MyTree implements FancyTree {
 	 * 
 	 */
 	public MyTree(int value, MyTree parent) {
-		this.value = value;
+		this.rootValue = value;
 		this.parent = parent;
 		MyTree.mostRecent = this;
-		if (MyTree.rootValue == 0) {
-			MyTree.rootValue = value;
-		}
+	}
+
+	public MyTree(int value) {
+		this.rootValue = value;
+		this.parent = null;
+		MyTree.mostRecent = this;
 	}
 
 	/**
@@ -34,7 +33,7 @@ public class MyTree implements FancyTree {
 	 */
 	@Override
 	public int getRootValue() {
-		return 0;
+		return this.rootValue;
 	}
 
 	@Override
@@ -84,7 +83,7 @@ public class MyTree implements FancyTree {
 
 
 	   public static void testTree () {
-		   System.out.println ("testing MyTree");
+		  System.out.println ("testing MyTree");
 	      System.out.println ("testing insert in empty tree");
 	      MyTree testTree = new MyTree (5, null);
 	      assert (testTree.getRootValue() == 5);
@@ -102,13 +101,13 @@ public class MyTree implements FancyTree {
 	      assert (testTree.parent == null);
 	      assert (testTree.left == left);
 	      assert (testTree.right == null);
-	      assert (testTree.mostRecent == left);
+	      assert (testTree.getMostRecent() == left);
 
 	      assert (testTree.left.rootValue == 3);
 	      assert (testTree.left.parent == testTree);
 	      assert (testTree.left.left == null);
 	      assert (testTree.left.right == null);
-	      assert (testTree.left.mostRecent == left);
+	      assert (testTree.left.getMostRecent() == left);
 
 
 	      System.out.println ("testing insert in two element tree");
@@ -120,19 +119,19 @@ public class MyTree implements FancyTree {
 	      assert (testTree.parent == null);
 	      assert (testTree.left == left);
 	      assert (testTree.right == right);
-	      assert (testTree.mostRecent == right);
+	      assert (testTree.getMostRecent() == right);
 
 	      assert (testTree.left.rootValue == 3);
 	      assert (testTree.left.parent == testTree);
 	      assert (testTree.left.left == null);
 	      assert (testTree.left.right == null);
-	      assert (testTree.left.mostRecent == left);
+//	      assert (testTree.left.getMostRecent() == left);	// ??
 
 	      assert (testTree.right.rootValue == 7);
 	      assert (testTree.right.parent == testTree);
 	      assert (testTree.right.left == null);
 	      assert (testTree.right.right == null);
-	      assert (testTree.right.mostRecent == right);
+	      assert (testTree.right.getMostRecent() == right);
 
 
 	      System.out.println ("testing insert in three element tree");
@@ -144,25 +143,25 @@ public class MyTree implements FancyTree {
 	      assert (testTree.parent == null);
 	      assert (testTree.left == left);
 	      assert (testTree.right == right);
-	      assert (testTree.mostRecent == leftRight);
+	      assert (testTree.getMostRecent() == leftRight);
 
 	      assert (testTree.left.rootValue == 3);
 	      assert (testTree.left.parent == testTree);
 	      assert (testTree.left.left == null);
 	      assert (testTree.left.right == leftRight);
-	      assert (testTree.left.mostRecent == leftRight);
+	      assert (testTree.left.getMostRecent() == leftRight);
 
 	      assert (testTree.right.rootValue == 7);
 	      assert (testTree.right.parent == testTree);
 	      assert (testTree.right.left == null);
 	      assert (testTree.right.right == null);
-	      assert (testTree.right.mostRecent == right);
+//	      assert (testTree.right.getMostRecent() == right);	// ??
 
 	      assert (testTree.left.right.rootValue == 4);
 	      assert (testTree.left.right.parent == left);
 	      assert (testTree.left.right.left == null);
 	      assert (testTree.left.right.right == null);
-	      assert (testTree.left.right.mostRecent == leftRight);
+	      assert (testTree.left.right.getMostRecent() == leftRight);
 
 
 	      System.out.println ("... all tests passed\n");      

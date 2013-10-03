@@ -1,3 +1,5 @@
+package unsw.comp9024.Tree.PracExam;
+
 public class Solution implements Exam {
 	// implement the following function "insertNext()"
 	// 
@@ -27,7 +29,53 @@ public class Solution implements Exam {
 	public void insertNext (FancyTree tree, int value) {
 		assert (tree != null);
 
-		// implement this method.  You may write additional helper methods if you wish.		
+		int height = this.getHeight(tree.getMostRecent(), 0);
+		FancyTree root = findRoot(tree);
+		
+		if(!findAndInsert(root, height, value)) {
+			findAndInsert(root, height + 1, value);
+		}
+	}
+	
+	// Depth Limited Breadth First Search
+	private boolean findAndInsert(FancyTree node, int depth, int value) {
+		if (depth <= 1) {
+			// Insert at the right spot
+			if(node.getLeft() == null) {
+				node.newLeftChild(value);
+				return true;
+			} else if (node.getRight() == null) {
+				node.newRightChild(value);
+				return true;
+			}
+			return false;
+		} else {
+			// Left to right search of the tree to the right depth.
+			if(!findAndInsert(node.getLeft(), depth - 1, value)) {
+				if( findAndInsert(node.getRight(), depth - 1, value) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		}
+	}
+
+	private FancyTree findRoot(FancyTree node) {
+		if (node.getParent() != null) {
+			return findRoot(node.getParent());
+		} else {
+			return node;
+		}
+	}
+	
+	private int getHeight(FancyTree node, int height) {
+		if (node.getParent() != null) {
+			height += getHeight(node.getParent(), height) + 1;
+		}
+		return height;
 	}
 
 }
