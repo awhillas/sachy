@@ -103,11 +103,18 @@ public class Reverser implements LineListener {
 					totalFramesRead += numFramesRead;
 				}
 				byte[] reversed = new byte[fileSize];
-				for(int i = audioBytes.length - bytesPerFrame - 1; i > 0; i -= bytesPerFrame) {
-					for(int j = i; j <= i + bytesPerFrame ; j++) {
-						reversed[audioBytes.length - j - 1] = audioBytes[j];
+				for (int f = totalFramesRead - 1; f >= 0; f--) {	// read frames in reverse order
+					int frameStart = f * bytesPerFrame;
+					int frameEnd = frameStart + bytesPerFrame;
+					for (int i = frameStart; i < frameEnd; i++) { // bytes in a frame in normal order
+						reversed[totalFramesRead - 1 - f + i] = audioBytes[i];
 					}
 				}
+//				for(int i = audioBytes.length - bytesPerFrame - 1; i > 0; i -= bytesPerFrame) {
+//					for(int j = i; j <= i + bytesPerFrame ; j++) {
+//						reversed[audioBytes.length - j - 1] = audioBytes[j];
+//					}
+//				}
 				this.b_out.write(reversed, 0, reversed.length);
 				System.out.println("totalFramesRead: " + totalFramesRead);
 			} catch (Exception ex) {
