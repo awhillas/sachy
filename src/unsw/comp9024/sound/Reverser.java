@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -16,14 +17,13 @@ import javax.sound.sampled.*;
 /**
  * @author Alexander Whillas (z3446737) <whillas@gmail.com>
  */
-public class Reverser implements LineListener {
+public class Reverser {
 
-	private File fileIn;
 	private String outputPath;
-	private AudioFormat streamFormat;
-	private ByteArrayOutputStream b_out;
-	private Clip clip;
-	private AudioFileFormat fileFormat;
+	private byte[][] frames;
+	private AudioInputStream stream;
+	private AudioFileFormat audioFileFormat;
+	private SourceDataLine auline;
 	
 	/**
 	 * Arguments
@@ -62,129 +62,134 @@ public class Reverser implements LineListener {
 
 	public Reverser(String inputPath, String outputPath) {
 		this.outputPath = outputPath;
-		this.fileIn = new File(inputPath);
+		File fileIn = new File(inputPath);
 		int fileSize = (int) fileIn.length();
 		if(fileSize == 0L) {
 			System.out.println("Input file "+inputPath+" does not exist?");
 		}
-		//System.out.println("File size is: "+fileSize);
-		this.readFile(fileSize);
-		if (outputPath != "") {
-			this.writeFile();
+		this.audioFileFormat = this.getFileFormat(fileIn);
+		this.stream = this.getFileInputStream(fileIn);
+		if (stream != null) {
+			SourceDataLine auline = this.getDataLine(stream);
+			if (auline != null) {
+				System.out.println(auline);
+				this.readFile(fileSize);
+				if (outputPath != "") {
+					this.writeFile();
+				}
+			}			
 		}
 	}
 	
-	private void readFile(int fileSize) {
-		int totalFramesRead = 0;
+	private AudioFileFormat getFileFormat(File fileIn) {
 		try {
-			AudioInputStream audioInputStream = 
-					AudioSystem.getAudioInputStream(this.fileIn);
-
-			this.streamFormat = audioInputStream.getFormat();
-			this.fileFormat = AudioSystem.getAudioFileFormat(this.fileIn);
-			int bytesPerFrame = this.streamFormat.getFrameSize();
-			if (bytesPerFrame == AudioSystem.NOT_SPECIFIED) {
-				// some audio formats may have unspecified frame size
-				// in that case we may read any amount of bytes
-				bytesPerFrame = 1;
-			}
-			
-			// Set an arbitrary buffer size of 1024 frames.
-			//int numBytes = 1024 * bytesPerFrame;
-			byte[] audioBytes = new byte[fileSize];
-			try {
-				int numBytesRead = 0;
-				int numFramesRead = 0;
-				this.b_out = new ByteArrayOutputStream();
-				// Try to read numBytes bytes from the file.
-				while ((numBytesRead = audioInputStream.read(audioBytes)) != -1) {
-					// Calculate the number of frames actually read.
-					numFramesRead = numBytesRead / bytesPerFrame;
-					totalFramesRead += numFramesRead;
-				}
-				byte[] reversed = new byte[fileSize];
-				for (int f = totalFramesRead - 1; f >= 0; f--) {	// read frames in reverse order
-					int frameStart = f * bytesPerFrame;
-					int frameEnd = frameStart + bytesPerFrame;
-					for (int i = frameStart; i < frameEnd; i++) { // bytes in a frame in normal order
-						reversed[totalFramesRead - 1 - f + i] = audioBytes[i];
-					}
-				}
-//				for(int i = audioBytes.length - bytesPerFrame - 1; i > 0; i -= bytesPerFrame) {
-//					for(int j = i; j <= i + bytesPerFrame ; j++) {
-//						reversed[audioBytes.length - j - 1] = audioBytes[j];
-//					}
-//				}
-				this.b_out.write(reversed, 0, reversed.length);
-				System.out.println("totalFramesRead: " + totalFramesRead);
-			} catch (Exception ex) {
-				// Handle the error...
-				System.out.println("102 - "+ex);
-				ex.printStackTrace();
-			}
-		} catch (Exception e) {
-			// Handle the error...
-			System.out.println("101 "+e);
+			 return AudioSystem.getAudioFileFormat(fileIn);
+		} catch (UnsupportedAudioFileException e) {
 			e.printStackTrace();
-		}		
-	}
-	
-	public void writeFile() {
-		//AudioInputStream ais = new AudioInputStream(this.audioBytes, this.fileFormat, 
-		//		(long) this.audioBytes.length);
-	    //AudioSystem.write(ais, AudioFileFormat.Type.WAVE, new File(this.outputPath));
-		// Hook output stream to output file
-    	ByteArrayInputStream b_in = new ByteArrayInputStream(this.b_out.toByteArray());
-    	AudioInputStream ais = new AudioInputStream(b_in, this.streamFormat, (int) fileIn.length());
-    	File output = new File(this.outputPath);
-    	try {
-			AudioSystem.write(ais, this.fileFormat.getType(), output);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+	
+	private void readFile(int fileSize) {
+		try {
+			readFrames();
+		} catch (IOException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+		// Reverse array in place
+		for (int i = 0; i < this.frames.length / 2; i++) {
+			byte[] temp = this.frames[i];
+			this.frames[i] = this.frames[frames.length - 1 - i];
+			this.frames[frames.length - i - 1] = temp;
+		}		
+	}
+	
+	private AudioInputStream getFileInputStream(File soundFile) {
+		AudioInputStream audioInputStream = null;
+        try { 
+            audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+        } catch (UnsupportedAudioFileException e1) { 
+            e1.printStackTrace();
+        } catch (IOException e1) { 
+            e1.printStackTrace();
+        }
+        return audioInputStream;
+	}
+	
+	private SourceDataLine getDataLine(AudioInputStream stream) {
+		AudioFormat format = stream.getFormat();
+        SourceDataLine auline = null;
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+ 
+        try { 
+            auline = (SourceDataLine) AudioSystem.getLine(info);
+            auline.open(format);
+        } catch (LineUnavailableException e) { 
+            e.printStackTrace();
+        } catch (Exception e) { 
+            e.printStackTrace();
+        }
+        return auline;
+	}
+	
+	private void readFrames() throws IOException {
+		System.out.println(stream);
+        int frameSize = stream.getFormat().getFrameSize();
+        this.frames = new byte[stream.available() / frameSize][frameSize];
+        for (int i = 0; i < frames.length; i++)
+        {
+            byte[] frame = new byte[frameSize];
+            int numBytes = stream.read(frame, 0, frameSize);
+            if (numBytes == -1)
+            {
+                break;
+            }
+            this.frames[i] = frame;
+        }
+        System.out.println("FrameSize = " + frameSize);
+        System.out.println("Number frames = " + frames.length);
+    }
+	
+	public void writeFile() {
+		// Hook output stream to output file
+		int size = this.frames.length * this.frames[0].length;
+		System.out.println(size);
+		ByteArrayInputStream byteStream = new ByteArrayInputStream(flattern(this.frames));
+		AudioInputStream steamOut = new AudioInputStream(byteStream, stream.getFormat(), size);
+    	File output = new File(this.outputPath);
+    	try {
+			AudioSystem.write(steamOut, audioFileFormat.getType(), output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private byte[] flattern(byte[][] in) {
+		int size = in.length * in[0].length;
+		byte[] out = new byte[size];
+		int s = 0;
+		for(int i = 0; i < in.length; i++) {
+			for(int j = 0; j < in[0].length; j++) {
+				out[s] = in[i][j];
+				s++;
+			}			
+		}
+		return out;
 	}
 	
 	/**
 	 * 
 	 */
 	private void play() {
-		Line.Info linfo = new Line.Info(Clip.class);
-		Line line = null;
-		try {
-			line = AudioSystem.getLine(linfo);
-		} catch (LineUnavailableException e1) {
-			e1.printStackTrace();
+		auline = this.getDataLine(stream);
+		auline.start();
+		for(int i = 0; i < frames.length - 1; i++) {
+			auline.write(frames[i], 0, stream.getFormat().getFrameSize());
 		}
-		clip = (Clip) line;
-		clip.addLineListener(this);
-		//AudioInputStream ais = AudioSystem.getAudioInputStream(this.audioBytes);
-		//clip.open(ais);
-//		try {
-//			clip.open(this.fileFormat, this.audioBytes, 0, this.audioBytes.length);
-//		} catch (LineUnavailableException e) {
-//			e.printStackTrace();
-//		}
-//		clip.start();		
-	}
-
-	/* (non-Javadoc)
-	 * @see javax.sound.sampled.LineListener#update(javax.sound.sampled.LineEvent)
-	 */
-	@Override
-	public void update(LineEvent le) {
-		LineEvent.Type type = le.getType();
-		if (type == LineEvent.Type.OPEN) {
-			System.out.println("OPEN");
-		} else if (type == LineEvent.Type.CLOSE) {
-			System.out.println("CLOSE");
-			System.exit(0);
-		} else if (type == LineEvent.Type.START) {
-			System.out.println("START");
-			//playingDialog.setVisible(true);
-		} else if (type == LineEvent.Type.STOP) {
-			System.out.println("STOP");
-			//playingDialog.setVisible(false);
-			clip.close();
-		}
+        auline.drain();
+        auline.close();
 	}
 }
