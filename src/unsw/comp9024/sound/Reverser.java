@@ -1,15 +1,8 @@
-/**
- * @see http://stackoverflow.com/questions/1267488/play-wav-file-backward
- */
 package unsw.comp9024.sound;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.sound.sampled.*;
 
