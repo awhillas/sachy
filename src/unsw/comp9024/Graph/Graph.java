@@ -8,11 +8,6 @@ package unsw.comp9024.Graph;
  *
  */
 public interface Graph {
-	/**
-	 * Calculate the cheapest path between two vertexes.
-	 * @param from
-	 * @param to
-	 * @return
-	 */
-	public int calculateCheapestPath(String from, String to);
+	public int numVertices();	
+	public int numEdges();
 }

@@ -1,12 +1,11 @@
 package unsw.comp9024.Graph;
 
 public class Vertex {
-	private String name;
-	private int value;
 	
-	public Vertex(String name, int cost) {
+	private String name;
+	
+	public Vertex(String name) {
 		this.name = name;
-		this.value = cost;
 	}
 	
 	/**
@@ -16,12 +15,7 @@ public class Vertex {
 		return name;
 	}
 	
-	/**
-	 * @return the value
-	 */
-	public int getValue() {
-		return value;
+	boolean equals(Vertex v) {
+		return name.equals(v.getName());
 	}
-	
-	
 }
