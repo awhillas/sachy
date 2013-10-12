@@ -60,5 +60,10 @@ public class AdjacencyMatrix implements Graph {
 							{0, 0, 0, 1, 0, 0}};
 	    
 	    AdjacencyMatrix graph = new AdjacencyMatrix(nodes, matrix);
+	    
+	    assert graph.numEdges() == 7: "Grpah should have 7 edges found "+graph.numEdges();
+	    assert graph.numVertices() == 6: "Graph should have 6 vertices, found "+graph.numVertices();
+	    
+	    System.out.println("PASSED all tests!");
 	}
 }
