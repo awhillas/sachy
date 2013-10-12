@@ -52,21 +52,29 @@ public class OperationNode implements ExpressionTree {
 	}
 
 	@Override
-	public int getValue() {
+	public double getValue() {
 		assert left != null && right != null : "Can't calculate operation value if children are null.";
 		
-		int l = left.getValue();
-		int r = right.getValue();
+		double l = left.getValue();
+		double r = right.getValue();
 		
-		return applyOperation(l, r);
+		if (l != -1 && r != -1) {
+			return applyOperation(l, r);
+		} else {
+			return -1;	// error
+		}
 	}
 
-	private int applyOperation(int a, int b) {
+	private double applyOperation(double a, double b) {
 		switch (this.op) {
 			case DIVIDE:
-				return a / b;
+				if (b != 0) {
+					return a / b;
+				} else {
+					return -1;	// error
+				}
 			case EXPONENT:
-				return a ^ b;
+				return Math.pow(a, b);
 			case MINUS:
 				return a - b;
 			case MULTIPLY:
@@ -79,20 +87,57 @@ public class OperationNode implements ExpressionTree {
 
 	@Override
 	public String toString() {
+		String out = "";
 		switch (this.op) {
 			case DIVIDE:
-				return left + " / " + right;
+				out += left + " / " + right;
+				break;
 			case EXPONENT:
-				return left + "^" + right;
+				out += left + " ^ " + right;
+				break;
 			case MINUS:
-				return left + " - " + right;
+				out += left + " - " + right;
+				break;
 			case MULTIPLY:
-				return left + " * " + right;
+				out += left + " * " + right;
+				break;
 			case PLUS:
-				return left + " + " + right;
+				out += left + " + " + right;
 		}
-		return "";
+		return "(" + out + ")";
 	}
 
+	public static void main(String[] args) {
+		
+		// Test all the operators in different precedence.
+		
+		// ((4 ^ 4) - (4 + 4))
+		
+		ExpressionTree root = new OperationNode(Operator.MINUS, 4);
+		root.insert(new OperationNode(Operator.PLUS, 6));
+		root.insert(new OperationNode(Operator.EXPONENT, 2));
+		int[] digitOrder = { 1, 3, 5, 7 };	// order to give digits.
+		for (int i : digitOrder) {
+			root.insert(new DigitNode(4, i));
+		}
+		System.out.println(root);
+		System.out.println(root.getValue());
+		assert root.getValue() == 248 : "Something went wrong :(";
+
+		// (4 * (4 / (4 + 4)))
+		
+		root = new OperationNode(Operator.MULTIPLY, 2);
+		root.insert(new OperationNode(Operator.DIVIDE, 4));
+		root.insert(new OperationNode(Operator.PLUS, 6));
+		for (int i : digitOrder) {
+			root.insert(new DigitNode(4, i));
+		}
+		System.out.println(root);
+		System.out.println(root.getValue());
+		assert root.getValue() == 2 : "Something went wrong :(";
+		
+		
+		System.out.println("PASSED!");
+	}
 		
 }

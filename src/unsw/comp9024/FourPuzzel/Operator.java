@@ -8,5 +8,5 @@ package unsw.comp9024.FourPuzzel;
  *
  */
 public enum Operator {
-	PLUS, MINUS, MULTIPLY, DIVIDE, EXPONENT 
+	EXPONENT, PLUS, MINUS, MULTIPLY, DIVIDE 
 }

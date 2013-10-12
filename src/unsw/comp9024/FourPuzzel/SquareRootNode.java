@@ -17,11 +17,12 @@ public class SquareRootNode extends DigitNode {
 		super(value, order);
 	}
 	
-	public int getValue() {
-		return (int) Math.sqrt(this.value);
+	public double getValue() {
+		return (double) Math.sqrt(this.value);
 	}
 	
 	public String toString() {
-		return Character.toString((char) 251) + this.value;
+		//return Character.toString((char) 251) + this.value;
+		return "\u221A" + (int) this.value;
 	}
 }

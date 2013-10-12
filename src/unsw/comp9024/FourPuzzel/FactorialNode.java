@@ -9,23 +9,19 @@ package unsw.comp9024.FourPuzzel;
  */
 public class FactorialNode extends DigitNode {
 
-	public FactorialNode(int value, int order) {
+	public FactorialNode(double value, int order) {
 		super(value, order);
 	}
 	
-	public int getValue() {
+	public double getValue() {
 		return this.factorial(this.value);
 	}
 
-	private int factorial(int x) {
-		int out = x;
-		while(x-- > 0) {
-			out *= x;
-		}
-		return out;
+	private double factorial(double value) {
+		return value == 1 ? 1 : value * factorial (value - 1);
 	}
 	
 	public String toString() {
-		return this.value + "!";
+		return (int) this.value + "!";
 	}
 }

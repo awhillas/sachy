@@ -10,6 +10,6 @@ package unsw.comp9024.FourPuzzel;
  */
 public interface ExpressionTree {
 	public int getOrder();
-	public int getValue();
+	public double getValue();
 	public void insert(ExpressionTree n);
 }

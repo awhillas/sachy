@@ -9,16 +9,16 @@ package unsw.comp9024.FourPuzzel;
  */
 public class DigitNode implements ExpressionTree {
 
-	int value;
+	double value;
 	int order;
 	
-	public DigitNode(int value, int order) {
+	public DigitNode(double value, int order) {
 		this.value = value;
 		this.order = order;
 	}
 
 	@Override
-	public int getValue() {
+	public double getValue() {
 		return value;
 	}
 
@@ -28,7 +28,7 @@ public class DigitNode implements ExpressionTree {
 	}	
 	
 	public String toString() {
-		return Integer.toString(value);
+		return Integer.toString((int) value);
 	}
 
 	@Override
